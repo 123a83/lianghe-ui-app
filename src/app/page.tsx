@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StatusBar from '@/components/ui/StatusBar';
 import UserInfo from '@/components/ui/UserInfo';
 import Header from '@/components/ui/Header';
@@ -12,6 +12,11 @@ import { mockUserData, mockNotification } from '@/lib/mockData';
 
 export default function LiangHePage() {
   const [userData, setUserData] = useState(mockUserData);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleGetValue = () => {
     // 模拟获取量值
@@ -33,8 +38,8 @@ export default function LiangHePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900 text-white font-sans relative overflow-hidden">
-      {/* 动态背景效果 */}
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-500/5 via-cyan-500/10 to-purple-600/5 animate-pulse pointer-events-none" />
+      {/* 动态背景效果 - 只在客户端渲染时添加动画 */}
+      <div className={`fixed inset-0 bg-gradient-to-br from-blue-500/5 via-cyan-500/10 to-purple-600/5 pointer-events-none ${mounted ? 'animate-background-pulse' : ''}`} />
       <div className="fixed inset-0 bg-gradient-radial from-cyan-500/15 via-transparent to-purple-600/10 pointer-events-none opacity-80" />
       
       {/* 主要内容 */}
