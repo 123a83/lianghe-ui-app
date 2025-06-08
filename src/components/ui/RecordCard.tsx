@@ -1,11 +1,29 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import type { RecordData } from '@/types';
-import { formatNumber, formatDate } from '@/utils/format';
+import { formatNumber } from '@/utils/format';
 
 interface RecordCardProps {
   data: RecordData;
 }
 
 export default function RecordCard({ data }: RecordCardProps) {
+  const [formattedDate, setFormattedDate] = useState(data.date);
+
+  useEffect(() => {
+    // 只在客户端格式化日期
+    const date = new Date(data.date);
+    const formatted = date.toLocaleString('zh-CN', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    setFormattedDate(formatted);
+  }, [data.date]);
+
   const getStatusConfig = (status: RecordData['status']) => {
     switch (status) {
       case 'completed':
@@ -77,7 +95,7 @@ export default function RecordCard({ data }: RecordCardProps) {
         <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/15">
           <div className="text-xs text-cyan-400 opacity-90 font-medium">
             <i className="fas fa-clock mr-2" />
-            {formatDate(data.date)}
+            {formattedDate}
           </div>
           
           <div className={`
